@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - DJ System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Acesso Restrito</h1>
+        <input type="email" id="email" placeholder="E-mail" required>
+        <input type="password" id="password" placeholder="Senha" required>
+        
+        <button onclick="login()">Entrar no Sistema</button>
+        <p id="status-msg"></p>
+        
+        <a href="register.html">Não tem conta? Registre-se</a>
+    </div>
+
+    <script>
+        const apiUrl = 'http://localhost:3000';
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const statusMsg = document.getElementById('status-msg');
+
+            try {
+                const res = await fetch(`${apiUrl}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if(res.ok) {
+                    const data = await res.json();
+                    localStorage.setItem('token', data.token);
+                    statusMsg.className = 'success';
+                    statusMsg.innerText = "Login aprovado! Redirecionando...";
+                    
+                    // Redireciona para a página de músicas após 1 segundo
+                    setTimeout(() => {
+                        window.location.href = 'musicas.html';
+                    }, 1000);
+                } else {
+                    statusMsg.className = '';
+                    statusMsg.innerText = "E-mail ou senha incorretos.";
+                }
+            } catch (error) {
+                statusMsg.innerText = "Erro de conexão com o servidor.";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro - DJ System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Criar Conta</h1>
+        <input type="email" id="email" placeholder="E-mail" required>
+        <input type="password" id="password" placeholder="Senha" required>
+        
+        <button onclick="register()">Registrar</button>
+        <p id="status-msg"></p>
+        
+        <a href="login.html">Já tem uma conta? Faça Login</a>
+    </div>
+
+    <script>
+        const apiUrl = 'http://localhost:3000';
+
+        async function register() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const statusMsg = document.getElementById('status-msg');
+
+            try {
+                const res = await fetch(`${apiUrl}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if(res.ok) {
+                    statusMsg.className = 'success';
+                    statusMsg.innerText = "Conta criada com sucesso! Vá para o login.";
+                } else {
+                    statusMsg.className = '';
+                    statusMsg.innerText = "Erro ao criar conta.";
+                }
+            } catch (error) {
+                statusMsg.innerText = "Erro de conexão com o servidor.";
+            }
+        }
+    </script>
+</body>
+</html>

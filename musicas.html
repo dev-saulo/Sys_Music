@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Setlist - DJ System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container" style="max-width: 500px;">
+        <h1>Minha Setlist</h1>
+        
+        <ul id="musicas-list" class="music-list">
+            </ul>
+
+        <p id="status-msg"></p>
+
+        <button class="btn-secondary" onclick="logout()">Sair</button>
+    </div>
+
+    <script>
+        const apiUrl = 'http://localhost:3000';
+
+        // Assim que a página abre, ela executa essa função
+        window.onload = async function() {
+            const token = localStorage.getItem('token');
+            const statusMsg = document.getElementById('status-msg');
+            const lista = document.getElementById('musicas-list');
+
+            // Se não tiver token, manda de volta pro login
+            if (!token) {
+                alert("Acesso negado. Faça login primeiro.");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const res = await fetch(`${apiUrl}/musicas`, {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if(res.ok) {
+                    const musicas = await res.json();
+                    musicas.forEach(m => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <span class="music-title">${m.titulo}</span>
+                            <span class="music-artist">${m.artista}</span>
+                        `;
+                        lista.appendChild(li);
+                    });
+                } else {
+                    statusMsg.innerText = 'Sessão expirada. Faça login novamente.';
+                    localStorage.removeItem('token'); // Limpa o token inválido
+                }
+            } catch (error) {
+                statusMsg.innerText = "Erro ao carregar as músicas.";
+            }
+        };
+
+        function logout() {
+            localStorage.removeItem('token'); // Apaga o token do navegador
+            window.location.href = 'login.html'; // Volta pra tela inicial
+        }
+    </script>
+</body>
+</html>

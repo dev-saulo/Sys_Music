@@ -1,0 +1,125 @@
+/* style.css */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #121212;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background: #1e1e1e;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h1 {
+    color: #bb86fc;
+    margin-bottom: 25px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background: #2c2c2c;
+    color: white;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #bb86fc;
+    box-shadow: 0 0 8px rgba(187, 134, 252, 0.3);
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background: #bb86fc;
+    color: #121212;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #9c68d9;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #bb86fc;
+    border: 1px solid #bb86fc;
+}
+
+.btn-secondary:hover {
+    background: rgba(187, 134, 252, 0.1);
+}
+
+a {
+    color: #bb86fc;
+    text-decoration: none;
+    font-size: 0.9em;
+    display: block;
+    margin-top: 20px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.music-list {
+    list-style: none;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.music-list li {
+    background: #2c2c2c;
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    border-left: 5px solid #bb86fc;
+    display: flex;
+    flex-direction: column;
+}
+
+.music-title {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.music-artist {
+    font-size: 0.85em;
+    color: #aaaaaa;
+    margin-top: 4px;
+}
+
+#status-msg {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #ff5252; /* Vermelho para erros */
+}
+.success { color: #4caf50 !important; } /* Verde para sucesso */
