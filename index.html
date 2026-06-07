@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>DJ Music System</title>
+</head>
+<body>
+    <h1>DJ Music System</h1>
+
+    <h3>Credenciais</h3>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Senha" required>
+    <br><br>
+    <button onclick="register()">Registrar</button>
+    <button onclick="login()">Login</button>
+    <p id="auth-status"></p>
+
+    <hr>
+
+    <h3>Músicas (Área Protegida)</h3>
+    <button onclick="getMusicas()">Obter Músicas</button>
+    <ul id="musicas-list"></ul>
+
+    <script>
+        const apiUrl = 'http://localhost:3000'; // Mude para a URL do Render depois do deploy
+
+        async function register() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const res = await fetch(`${apiUrl}/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            if(res.ok) document.getElementById('auth-status').innerText = "Usuário registrado com sucesso!";
+        }
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const res = await fetch(`${apiUrl}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            if(res.ok) {
+                const data = await res.json();
+                localStorage.setItem('token', data.token); // Salva o JWT no navegador
+                document.getElementById('auth-status').innerText = "Login realizado! Token salvo.";
+            } else {
+                document.getElementById('auth-status').innerText = "Falha no login.";
+            }
+        }
+
+        async function getMusicas() {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${apiUrl}/musicas`, {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` } // Envia o JWT no cabeçalho
+            });
+
+            const lista = document.getElementById('musicas-list');
+            lista.innerHTML = '';
+
+            if(res.ok) {
+                const musicas = await res.json();
+                musicas.forEach(m => {
+                    const li = document.createElement('li');
+                    li.innerText = `${m.titulo} - ${m.artista}`;
+                    lista.appendChild(li);
+                });
+            } else {
+                lista.innerHTML = '<li>Erro: Não autorizado. Faça login primeiro.</li>';
+            }
+        }
+    </script>
+</body>
+</html>
